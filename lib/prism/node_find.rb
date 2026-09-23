@@ -16,6 +16,10 @@ module Prism
     #
     #: (Method | UnboundMethod | Proc | Thread::Backtrace::Location callable) -> Node?
     def self.find(callable)
+      if callable.respond_to?(:syntax_tree) and node = callable.syntax_tree and node.is_a?(Prism::Node)
+        return node
+      end
+
       case callable
       when Proc
         if defined?(::RubyVM)
